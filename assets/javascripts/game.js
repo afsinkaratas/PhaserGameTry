@@ -15,12 +15,15 @@ function preload() {
 
 function create() {
 
-  //background
+  //Enable physics
+  game.physics.startSystem(Phaser.Physics.ARCADE);
+
+  //Background
   backgroundGrass = game.add.sprite(0, 0, 'background');
   backgroundGrass.width = canvas.width;
   backgroundGrass.height = canvas.height;
 
-  //background grasses
+  //Background grasses
   grasses = game.add.group();
   for (var i = 0; i < 100; i++) {
     var grass = grasses.create(Math.random()*canvas.width, Math.random()*canvas.height, 'grass');
@@ -29,7 +32,7 @@ function create() {
     grass.height = canvas.height*0.1;
   }
 
-  //hero
+  //Hero
   hero = game.add.sprite(game.world.centerX, game.world.centerY, 'hero');
   hero.anchor.setTo(0.5, 0.5);
   hero.width = canvas.width*0.12;
