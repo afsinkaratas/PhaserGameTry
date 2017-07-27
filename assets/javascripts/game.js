@@ -38,6 +38,9 @@ function create() {
   hero.width = canvas.width*0.12;
   hero.height = canvas.height*0.12;
 
+  game.physics.arcade.enable(hero); // Enable hero physics
+  hero.body.collideWorldBounds = true;
+
 }
 
 function update() {
