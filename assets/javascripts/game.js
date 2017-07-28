@@ -11,7 +11,7 @@ function preload() {
 
   game.load.image('background', 'assets/images/backgroundGrass.png');
   game.load.image('grass', 'assets/images/grass.png');
-  game.load.image('monster', 'assets/images/monster.gif');
+  game.load.image('monster', 'assets/images/monster.gif', 32, 32);
   game.load.image('bullet', 'assets/images/projectile.png', 20, 20);
 
   game.load.spritesheet('hero', 'assets/images/People1.png', 32, 32);
@@ -35,7 +35,8 @@ function create() {
   }
 
   //Start menu
-  startMenu.text = game.add.text(canvas.width*0.5, canvas.height*0.4, "Movement: WASD Fire: Space \nSelect a character to start the game");
+  startMenu.text = game.add.text(canvas.width*0.5, canvas.height*0.4,
+    "Movement: WASD Fire: LMB\nSelect a character to start the game");
   startMenu.text.anchor.set(0.5);
   startMenu.text.align = "center";
 
@@ -59,13 +60,12 @@ function create() {
 
   //Hero
   hero = game.add.sprite(game.world.centerX, game.world.centerY, 'hero');
+  game.physics.arcade.enable(hero);
   hero.anchor.set(0.5);
   hero.scale.setTo(1.3,1.3);
   hero.speed = 100;
   hero.visible = false;
-
-  // Enable hero physics
-  game.physics.arcade.enable(hero);
+  hero.body.setCircle(16,1.3,1.3);
   game.camera.target = hero;
 
   //Monsters
@@ -75,7 +75,7 @@ function create() {
   weapon = game.add.weapon(30, 'bullet');
   weapon.bullets.forEach(
     function(b) {
-      b.scale.setTo(0.15, 0.15);
+      b.scale.setTo(0.15, 0.15); 124*0.15
     }, this);
   weapon.bulletKillType = Phaser.Weapon.KILL_CAMERA_BOUNDS;
   weapon.bulletSpeed = 250;
@@ -89,21 +89,21 @@ function create() {
     'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D } );
 
   characterSelectKeys = game.input.keyboard.addKeys( { 'one': Phaser.KeyCode.ONE, 'two': Phaser.KeyCode.TWO,
-    'three': Phaser.KeyCode.THREE, 'four': Phaser.KeyCode.FOUR, 'five': Phaser.KeyCode.FIVE, 'six': Phaser.KeyCode.SIX,
-    'seven': Phaser.KeyCode.SEVEN, 'eight': Phaser.KeyCode.EIGHT } );
+    'three': Phaser.KeyCode.THREE, 'four': Phaser.KeyCode.FOUR, 'five': Phaser.KeyCode.FIVE,
+    'six': Phaser.KeyCode.SIX, 'seven': Phaser.KeyCode.SEVEN, 'eight': Phaser.KeyCode.EIGHT } );
 
   escKey = game.input.keyboard.addKey(Phaser.KeyCode.ESC);
   escKey.onDown.add(restartGame);
 
-  fireButton = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+  game.input.mouse.capture = true;
 
 }
 
 function update() {
 
   if(start){
-    scoreText.x = hero.x - canvas.width*0.5 + 10;
-    scoreText.y = hero.y - canvas.height*0.5 + 10;
+    scoreText.x = game.camera.x + 10;
+    scoreText.y = game.camera.y + 10;
     scoreText.text = "Score: " + Math.round(score);
 
     //Score
@@ -189,9 +189,9 @@ function update() {
       }, this);
 
     //Weapon fire
-    if (fireButton.isDown){
+    if(game.input.activePointer.leftButton.isDown){
       weapon.fireFrom.setTo(hero.x, hero.y);
-      weapon.fireAngle = Phaser.ANGLE_UP + 45 * lastDirection;
+      weapon.fireAngle = game.physics.arcade.angleToPointer(hero) * 60;
       weapon.fire();
     }
 
@@ -241,7 +241,7 @@ function startGame(){
   start = true;
   //monster timer
   monsterSpawnTimer = game.time.create(false);
-  monsterSpawnTimer.loop(2500, generateMonsters);
+  monsterSpawnTimer.loop(2000 + Math.random() * 2000, generateMonsters);
   monsterSpawnTimer.start();
 }
 
@@ -286,11 +286,11 @@ function generateMonsters(){
 
   var loc = monsterLocation();
   var monster = monsters.create(loc.x + hero.x, loc.y + hero.y, 'monster');
-  monster.anchor.set(0.5);
+  game.physics.arcade.enable(monster);
   monster.width = canvas.width*0.12;
   monster.height = canvas.height*0.12;
   monster.speed = 90;
-  game.physics.arcade.enable(monster);
+  monster.body.setCircle(monster.width*0.7, monster.width*0.6, monster.height*0.6);
 }
 
 function monsterLocation(){
