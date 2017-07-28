@@ -5,7 +5,7 @@ var game = new Phaser.Game(canvas.width, canvas.height, Phaser.AUTO, '',
 var backgroundGrass, grasses, hero, monsters, weapon, scoreText;
 var startMenu = {};
 var movementKeys, characterSelectKeys;
-var charOffset = 0, start = false, lastDirection, score = 0;
+var charOffset = 0, start = false, lastDirection = 4, score = 0;
 
 function preload() {
 
@@ -35,8 +35,9 @@ function create() {
   }
 
   //Start menu
-  startMenu.text = game.add.text(canvas.width*0.5, canvas.height*0.5, "Select a character to start the game");
+  startMenu.text = game.add.text(canvas.width*0.5, canvas.height*0.4, "Movement: WASD Fire: Space \nSelect a character to start the game");
   startMenu.text.anchor.set(0.5);
+  startMenu.text.align = "center";
 
   //Hero icons and numbers
   startMenu.heros = [];
@@ -117,18 +118,18 @@ function update() {
         hero.body.velocity.y = -hero.speed*Math.SQRT2/2
         hero.body.velocity.x = -hero.speed*Math.SQRT2/2
         hero.animations.play('upleft');
-        lastDirection = "upleft";
+        lastDirection = 7;
       }
       else if(movementKeys.right.isDown){
         hero.body.velocity.y = -hero.speed*Math.SQRT2/2
         hero.body.velocity.x = hero.speed*Math.SQRT2/2
         hero.animations.play('upright');
-        lastDirection = "upright";
+        lastDirection = 1;
       }
       else{
         hero.body.velocity.y = -hero.speed;
         hero.animations.play('up');
-        lastDirection = "up";
+        lastDirection = 0;
       }
     }
     else if (movementKeys.down.isDown)
@@ -137,31 +138,31 @@ function update() {
         hero.body.velocity.y = hero.speed*Math.SQRT2/2
         hero.body.velocity.x = -hero.speed*Math.SQRT2/2
         hero.animations.play('downleft');
-        lastDirection = "downleft";
+        lastDirection = 5;
       }
       else if(movementKeys.right.isDown){
         hero.body.velocity.y = hero.speed*Math.SQRT2/2
         hero.body.velocity.x = hero.speed*Math.SQRT2/2
         hero.animations.play('downright');
-        lastDirection = "downright";
+        lastDirection = 3;
       }
       else{
         hero.body.velocity.y = hero.speed;
         hero.animations.play('down');
-        lastDirection = "down";
+        lastDirection = 4;
       }
     }
     else if (movementKeys.left.isDown)
     {
         hero.body.velocity.x = -hero.speed;
         hero.animations.play('left');
-        lastDirection = "left";
+        lastDirection = 6;
     }
     else if (movementKeys.right.isDown)
     {
         hero.body.velocity.x = hero.speed;
         hero.animations.play('right');
-        lastDirection = "right";
+        lastDirection = 2;
     }
     else
     {
@@ -187,24 +188,10 @@ function update() {
         monster.body.velocity.y = (monster.speed/(Math.abs(xdif)+Math.abs(ydif))*ydif);
       }, this);
 
+    //Weapon fire
     if (fireButton.isDown){
       weapon.fireFrom.setTo(hero.x, hero.y);
-      if (lastDirection == "up")
-        weapon.fireAngle = Phaser.ANGLE_UP;
-      else if (lastDirection == "upleft")
-        weapon.fireAngle = Phaser.ANGLE_UP-45;
-      else if (lastDirection == "upright")
-        weapon.fireAngle = Phaser.ANGLE_UP+45;
-      else if (lastDirection == "down")
-        weapon.fireAngle = Phaser.ANGLE_DOWN;
-      else if (lastDirection == "downleft")
-        weapon.fireAngle = Phaser.ANGLE_DOWN+45;
-      else if (lastDirection == "downright")
-        weapon.fireAngle = Phaser.ANGLE_DOWN-45;
-      else if (lastDirection == "left")
-        weapon.fireAngle = Phaser.ANGLE_LEFT;
-      else if (lastDirection == "right")
-        weapon.fireAngle = Phaser.ANGLE_RIGHT;
+      weapon.fireAngle = Phaser.ANGLE_UP + 45 * lastDirection;
       weapon.fire();
     }
 
