@@ -45,10 +45,7 @@ function create() {
     startMenu.heros[i] = game.add.sprite(canvas.width*0.125*i+32, canvas.height*0.6+16, 'hero');
     startMenu.heros[i].anchor.set(0.5);
     startMenu.heros[i].scale.setTo(1.3,1.3);
-    if(i<4)
-      startMenu.heros[i].frame = 1 + i*3;
-    else
-      startMenu.heros[i].frame = 1 + i*3 + 36;
+    startMenu.heros[i].frame = 1 + i*3 + Math.floor(i/4)*36;
 
     startMenu.heroNumbers[i] = game.add.text(canvas.width*0.125*i+32, canvas.height*0.7+16, i+1);
     startMenu.heroNumbers[i].anchor.set(0.5);
