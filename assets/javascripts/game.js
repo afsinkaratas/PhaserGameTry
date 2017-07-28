@@ -216,21 +216,21 @@ function update() {
   else{
     //Select character
     if(characterSelectKeys.one.isDown)
-      updateHeroAnimation(charOffset=0);
+      updateHeroAnimation(0);
     else if(characterSelectKeys.two.isDown)
-      updateHeroAnimation(charOffset=3);
+      updateHeroAnimation(3);
     else if(characterSelectKeys.three.isDown)
-      updateHeroAnimation(charOffset=6);
+      updateHeroAnimation(6);
     else if(characterSelectKeys.four.isDown)
-      updateHeroAnimation(charOffset=9);
+      updateHeroAnimation(9);
     else if(characterSelectKeys.five.isDown)
-      updateHeroAnimation(charOffset=48);
+      updateHeroAnimation(48);
     else if(characterSelectKeys.six.isDown)
-      updateHeroAnimation(charOffset=51);
+      updateHeroAnimation(51);
     else if(characterSelectKeys.seven.isDown)
-      updateHeroAnimation(charOffset=54);
+      updateHeroAnimation(54);
     else if(characterSelectKeys.eight.isDown)
-      updateHeroAnimation(charOffset=57);
+      updateHeroAnimation(57);
   }
 
 }
@@ -246,7 +246,7 @@ function updateHeroAnimation(offset){
   hero.animations.add('down', [0+offset, 2+offset], 5, true);
   hero.animations.add('downleft', [0+offset, 12+offset, 2+offset, 14+offset], 5, true);
   hero.animations.add('downright', [0+offset, 24+offset, 2+offset, 26+offset], 5, true);
-  hero.frame = 1 + charOffset
+  hero.frame = 1 + offset
   startGame();
 }
 
