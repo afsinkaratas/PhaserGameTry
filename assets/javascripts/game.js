@@ -2,10 +2,10 @@ var canvas = { width: 640, height: 480};
 var game = new Phaser.Game(canvas.width, canvas.height, Phaser.AUTO, '',
   { preload: preload, create: create, update: update });
 
-var backgroundGrass, grasses, hero, monsters, weapon;
+var backgroundGrass, grasses, hero, monsters, weapon, scoreText;
 var startMenu = {};
 var movementKeys, characterSelectKeys;
-var charOffset = 0, start = false, lastDirection;
+var charOffset = 0, start = false, lastDirection, score = 0;
 
 function preload() {
 
@@ -79,10 +79,13 @@ function create() {
     function(b) {
       b.scale.setTo(0.15, 0.15);
     }, this);
-  weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+  weapon.bulletKillType = Phaser.Weapon.KILL_CAMERA_BOUNDS;
   weapon.bulletSpeed = 250;
-  weapon.fireRate = 700;
-  
+  weapon.fireRate = 700
+
+  //Score
+  scoreText = game.add.text(0, 0, "");
+
   //Keys
   movementKeys = game.input.keyboard.addKeys( { 'up': Phaser.KeyCode.W, 'down': Phaser.KeyCode.S,
     'left': Phaser.KeyCode.A, 'right': Phaser.KeyCode.D } );
@@ -101,6 +104,14 @@ function create() {
 function update() {
 
   if(start){
+    scoreText.x = hero.x - canvas.width*0.5 + 10;
+    scoreText.y = hero.y - canvas.height*0.5 + 10;
+    scoreText.text = "Score: " + Math.round(score);
+
+    //Score
+    score += 0.04;
+
+
     //Hero movement
     hero.body.velocity.setTo(0,0);
 
@@ -320,6 +331,7 @@ function monsterLocation(){
 function dieMonster(bullet, monster){
   bullet.kill();
   monster.kill();
+  score += 100;
 }
 
 function youDied(hero, monster){
