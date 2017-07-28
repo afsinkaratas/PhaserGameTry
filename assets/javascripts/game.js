@@ -215,22 +215,14 @@ function update() {
   }
   else{
     //Select character
-    if(characterSelectKeys.one.isDown)
-      updateHeroAnimation(0);
-    else if(characterSelectKeys.two.isDown)
-      updateHeroAnimation(3);
-    else if(characterSelectKeys.three.isDown)
-      updateHeroAnimation(6);
-    else if(characterSelectKeys.four.isDown)
-      updateHeroAnimation(9);
-    else if(characterSelectKeys.five.isDown)
-      updateHeroAnimation(48);
-    else if(characterSelectKeys.six.isDown)
-      updateHeroAnimation(51);
-    else if(characterSelectKeys.seven.isDown)
-      updateHeroAnimation(54);
-    else if(characterSelectKeys.eight.isDown)
-      updateHeroAnimation(57);
+    for(var i = 0; i < Object.keys(characterSelectKeys).length; i++ ){
+      var curKey = characterSelectKeys[Object.keys(characterSelectKeys)[i]];
+      if(curKey.isDown){
+        var k = curKey.keyCode - 49;
+        updateHeroAnimation( charOffset=(k*3 + Math.floor(k/4)*36) );
+      }
+    }
+
   }
 
 }
@@ -281,6 +273,7 @@ function restartGame(){
   monsters.removeAll(true);
   monsterSpawnTimer.destroy();
   start = false;
+  score = 0;
 
   game.camera.x = 0;
   game.camera.y = 0;
