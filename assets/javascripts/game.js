@@ -74,8 +74,10 @@ function create() {
   //Weapon
   weapon = game.add.weapon(30, 'bullet');
   weapon.bullets.forEach(
-    function(b) {
-      b.scale.setTo(0.15, 0.15); 124*0.15
+    function(bullet) {
+      bullet.width = 24;
+      bullet.height = 24;
+      bullet.body.setCircle(12);
     }, this);
   weapon.bulletKillType = Phaser.Weapon.KILL_CAMERA_BOUNDS;
   weapon.bulletSpeed = 250;
@@ -188,6 +190,8 @@ function update() {
         monster.body.velocity.y = (monster.speed/(Math.abs(xdif)+Math.abs(ydif))*ydif);
       }, this);
 
+
+
     //Weapon fire
     if(game.input.activePointer.leftButton.isDown){
       weapon.fireFrom.setTo(hero.x, hero.y);
@@ -290,7 +294,7 @@ function generateMonsters(){
   monster.width = canvas.width*0.12;
   monster.height = canvas.height*0.12;
   monster.speed = 90;
-  monster.body.setCircle(monster.width*0.7, monster.width*0.6, monster.height*0.6);
+  monster.body.setCircle(monster.width*0.35, monster.width*0.78, monster.height*0.78);
 }
 
 function monsterLocation(){
